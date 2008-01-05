@@ -1,5 +1,39 @@
 2008-01-05  cho45
 
+	* [r4075] lib/shipit.rb:
+	  
+	  タスクの実行を内部でやらないように (version をよみなおすため)
+	  いろいろやってみたけどこれがいちばん簡単なようだ……
+
+	* [r4073] lib/shipit.rb:
+	  
+	  version のかきかえがうまくいかず、重複してリリースできない問題を修正
+
+	* [r4071] lib/shipit.rb:
+	  
+	  変更が残っている場合にはリリースコミットをできないように
+
+	* [r4070] lib/shipit.rb:
+	  
+	  定数参照の修正漏れ
+
+	* [r4069] lib/shipit.rb:
+	  
+	  run phase 時にエラーがでないように定数参照は prepare 時にするように
+
+	* [r4068] Rakefile, lib/shipit.rb:
+	  
+	  ChangeVersion の仕様をよくあるほうに変更
+	  s.ChangeVersion filename, "VERSION"
+
+	* [r4054] lib/shipit.rb:
+	  
+	  tag のとき -m 追加 (エディタがひらいてしまっていた)
+
+	* [r4052] ChangeLog, Rakefile:
+	  
+	  Release 0.0.2
+
 	* [r4051] ., README:
 	  
 	  svn:ignore の設定と README のサンプルを Rakefile に追従

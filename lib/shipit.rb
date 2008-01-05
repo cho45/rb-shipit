@@ -148,15 +148,15 @@ class Rake::ShipitTask::Step::Task
 	end
 
 	def prepare
-		@names.each do |name|
-			@tasks << Rake.application[name.to_sym]
-			raise "Unknown task: #{name}" if @tasks.last.nil?
+		tasks = `rake -T`.scan(/^rake ([^\s]+)/).flatten
+		@names.each do |t|
+			raise "Unknown task #{t}" unless tasks.include? t.to_s
 		end
 	end
 
 	def run
-		@tasks.each do |t|
-			t.invoke
+		@names.each do |t|
+			system("rake", t.to_s)
 		end
 	end
 end
@@ -171,6 +171,7 @@ class Rake::ShipitTask::Step::RubyForge
 
 	def prepare
 		require 'rubyforge'
+		p @vers
 
 		@rf = RubyForge.new
 		puts "Logging in"

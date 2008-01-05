@@ -108,11 +108,11 @@ class Rake::ShipitTask::Step::ChangeVersion
 		@new_version = @match[1].succ
 		raise "Can't find version string in #{@file}." if @match.nil?
 		puts "Find version string #{@match[1]} and will change to #{@new_version}"
+		@vers.replace @new_version
 	end
 
 	def run
 		puts "Changing version to #{@new_version}"
-		@vers.replace @new_version
 		@file.open("w") do |f|
 			f.print @content[0..@match.begin(1)-1]
 			f.print @new_version
@@ -163,36 +163,34 @@ end
 
 class Rake::ShipitTask::Step::RubyForge
 	def initialize(group_id=RUBYFORGE_PROJECT)
-		@group_id = group_id
+		@group_id    = group_id
+		@description = DESCRIPTION
+		@name        = NAME
+		@vers        = VERS
 	end
 
 	def prepare
 		require 'rubyforge'
-		pkg = "pkg/#{NAME}-#{VERS}"
-		puts "pkg"
 
 		@rf = RubyForge.new
 		puts "Logging in"
 		@rf.login
 		@c = @rf.userconfig
 		@c["preformatted"] = true
+		unless @rf.autoconfig["group_ids"].keys.include?(@group_id)
+			raise "Unknown group: #{@group_id}"
+		end
+		unless @rf.autoconfig["package_ids"].keys.include?(@name)
+			@rf.create_package(@group_id, @name)
+		end
+	end
+
+	def run
+		pkg = "pkg/#{@name}-#{@vers}"
 		@files = [
 			"#{pkg}.tgz",
 			"#{pkg}.gem"
 		].compact
-		unless @rf.autoconfig["group_ids"].keys.include?(@group_id)
-			raise "Unknown group: #{@group_id}"
-		end
-		unless @rf.autoconfig["package_ids"].keys.include?(NAME)
-			@rf.create_package(@group_id, NAME)
-		end
-
-		@description = DESCRIPTION
-		@name        = NAME
-		@vers        = VERS
-	end
-
-	def run
 		puts "Releasing #{@name} #{@vers}"
 		@rf.add_release @group_id, @name, @vers, *@files
 		@rf.post_news @group_id, "#{@name} #{@vers} released.", "#{@description}"

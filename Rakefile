@@ -122,7 +122,7 @@ Rake::ShipitTask.new do |s|
 	}.and {
 		system("svn2cl.sh --break-before-msg=2 --group-by-day  --include-rev --separate-daylogs")
 	}
-	s.ChangeVersion
+	s.ChangeVersion __FILE__, "VERS"
 	s.Commit
 	s.Task :clean, :package
 	s.RubyForge

@@ -90,7 +90,7 @@ class Rake::ShipitTask::Step::Twitter
 end
 
 class Rake::ShipitTask::Step::ChangeVersion
-	def initialize(file="Rakefile", name="VERS", vers=VERS)
+	def initialize(file, name="VERSION", vers=VERS)
 		@file = file
 		@name = name
 		@vers = vers
@@ -98,17 +98,18 @@ class Rake::ShipitTask::Step::ChangeVersion
 
 	def prepare
 		require "pathname"
-		@rakefile = Pathname.new(@file)
-		@content  = @rakefile.read
+		@file     = Pathname.new(@file)
+		@content  = @file.read
 		@match    = @content.match(/#{@name}\s*=\s*"(\d+\.\d+\.\d+)"/)
 		@new_version = @match[1].succ
-		raise "Can't find version string in Rakefile." if @match.nil?
+		raise "Can't find version string in #{@file}." if @match.nil?
+		puts "Find version string #{@match[1]} and will change to #{@new_version}"
 	end
 
 	def run
 		puts "Changing version to #{@new_version}"
 		@vers.replace @new_version
-		@rakefile.open("w") do |f|
+		@file.open("w") do |f|
 			f.print @content[0..@match.begin(1)-1]
 			f.print @new_version
 			f.print @content[@match.end(1)..-1]

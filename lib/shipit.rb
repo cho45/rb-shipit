@@ -63,7 +63,7 @@ class Rake::ShipitTask::Step::Step
 end
 
 class Rake::ShipitTask::Step::Twitter
-	def initialize(msg="Released #{NAME} #{VERS} (#{DESCRIPTION})")
+	def initialize(msg=nil)
 		@msg = msg
 	end
 
@@ -84,6 +84,7 @@ class Rake::ShipitTask::Step::Twitter
 	end
 
 	def run
+		@msg ||= "Released #{NAME} #{VERS} (#{DESCRIPTION})"
 		@client.status(:post, @msg)
 	end
 end

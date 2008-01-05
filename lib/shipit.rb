@@ -81,10 +81,14 @@ class Rake::ShipitTask::Step::Twitter
 		})
 		@client = Twitter::Client.new(@config)
 		raise "Twitter::Client auth failed" unless @client.authenticate?(@config["login"], @config["password"])
+
+		@description = DESCRIPTION
+		@name        = NAME
+		@vers        = VERS
 	end
 
 	def run
-		@msg ||= "Released #{NAME} #{VERS} (#{DESCRIPTION})"
+		@msg ||= "Released %s %s (%s)" % [@name, @vers, @description]
 		@client.status(:post, @msg)
 	end
 end
@@ -100,7 +104,7 @@ class Rake::ShipitTask::Step::ChangeVersion
 		require "pathname"
 		@file     = Pathname.new(@file)
 		@content  = @file.read
-		@match    = @content.match(/#{@name}\s*=\s*"(\d+\.\d+\.\d+)"/)
+		@match    = @content.match(/#{@name}\s*=\s*['"](\d+\.\d+\.\d+)['"]/)
 		@new_version = @match[1].succ
 		raise "Can't find version string in #{@file}." if @match.nil?
 		puts "Find version string #{@match[1]} and will change to #{@new_version}"
@@ -123,10 +127,11 @@ class Rake::ShipitTask::Step::Commit
 	end
 
 	def prepare
+		@vers = VERS
 	end
 
 	def run
-		system "svn", "ci", "-m", @msg || "Release #{VERS}"
+		system "svn", "ci", "-m", @msg || "Release #{@vers}"
 	end
 end
 
@@ -177,12 +182,14 @@ class Rake::ShipitTask::Step::RubyForge
 		end
 
 		@description = DESCRIPTION
+		@name        = NAME
+		@vers        = VERS
 	end
 
 	def run
-		puts "Releasing #{NAME} #{VERS}"
-		@rf.add_release @group_id, NAME, VERS, *@files
-		@rf.post_news @group_id, "#{NAME} #{VERS} released.", "#{@description}"
+		puts "Releasing #{@name} #{@vers}"
+		@rf.add_release @group_id, @name, @vers, *@files
+		@rf.post_news @group_id, "#{@name} #{@vers} released.", "#{@description}"
 	end
 end
 

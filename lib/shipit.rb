@@ -217,12 +217,13 @@ class Rake::ShipitTask::Step::Tag
 		else
 			raise "Run at trunk!"
 		end
+		@vers = VERS
 	end
 
 	def run
 		trunk = @url + "trunk"
-		tag   = @url + ("tags/#{@format}" % VERS)
-		msg   = "Release %s" % VERS
+		tag   = @url + ("tags/#{@format}" % @vers)
+		msg   = "Release %s" % @vers
 		command = ["svn", "cp", "-m", msg, trunk, tag].map {|i| i.to_s }
 		system(*command)
 	end

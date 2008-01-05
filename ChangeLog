@@ -1,4 +1,15 @@
-== 0.0.1 / 2008-01-05
+2008-01-05  cho45
 
-* initial release
+	* [r4044] Rakefile:
+	  
+	  引数間違い
+
+	* [r4043] README, Rakefile, lib/shipit.rb:
+	  
+	  description とか
+
+	* [r4042] ., ChangeLog, README, Rakefile, lib, lib/shipit.rb, test,
+	  test/shipit_test.rb, test/test_helper.rb:
+	  
+	  import
 

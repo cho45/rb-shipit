@@ -46,6 +46,7 @@ Example (This is from shipit gem Rakefile):
 		s.Commit
 		s.Task :clean, :package
 		s.RubyForge
+		s.Tag
 		s.Twitter
 	end
 

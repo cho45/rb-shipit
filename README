@@ -4,7 +4,12 @@
 
 == Description
 
-shipit is automation of release process.
+shipit is automation of release process with Rake tasks.
+
+This is a port of ShipIt, originally written in Perl by Brad Fitzpatrick.
+But this is very different from original version (don't use .shipit and
+always use with Rake.) because almost ruby libraries uses rake to release
+process.
 
 
 == Installation
@@ -20,8 +25,29 @@ shipit is automation of release process.
 
 == Features/Problems
 
+* svn only...
 
 == Synopsis
+
+Example (This is from shipit gem Rakefile):
+	Rake::ShipitTask.new do |s|
+		s.Step.new {
+			system("svn", "up")
+		}.and {}
+		s.Ask
+		s.Task :rubyforge
+		s.Step.new {
+			raise "svn2cl.sh is not found" unless system("svn2cl.sh", "--version")
+		}.and {
+			system("svn2cl.sh --break-before-msg=2 --group-by-day  --include-rev --separate-daylogs")
+		}
+		s.ChangeVersion
+		s.Commit
+		s.Task :clean, :package
+		s.RubyForge
+		s.Twitter
+	end
+
 
 
 == Copyright

@@ -128,6 +128,12 @@ class Rake::ShipitTask::Step::Commit
 
 	def prepare
 		@vers = VERS
+		st = `svn st`
+		unless st.empty?
+			puts "Any changes remain?"
+			puts st
+			exit
+		end
 	end
 
 	def run
@@ -227,33 +233,5 @@ class Rake::ShipitTask::Step::Tag
 		command = ["svn", "cp", "-m", msg, trunk, tag].map {|i| i.to_s }
 		system(*command)
 	end
-end
-
-
-__END__
-require "shipit"
-
-Rake::ShipitTask.new do |s|
-	s.Ask
-	s.Step.new {
-		puts "prepare phase"
-	}.and {
-		puts "run phase"
-	}
-	s.Twitter "Test phase"
-end
-
-Rake::ShipitTask.new do |s|
-	s.Ask
-	s.Task :test
-	s.ChangeVersion
-	s.Commit
-	s.Task :clean, :package
-	s.RubyForge
-	s.Step.new {
-
-	}.and {
-	}
-	s.Twitter
 end
 

@@ -126,6 +126,7 @@ Rake::ShipitTask.new do |s|
 	s.Commit
 	s.Task :clean, :package
 	s.RubyForge
+	s.Tag
 	s.Twitter
 end
 

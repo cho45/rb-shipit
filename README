@@ -8,7 +8,7 @@ shipit is automation of release process with Rake tasks.
 
 This is a port of ShipIt, originally written in Perl by Brad Fitzpatrick.
 But this is very different from original version (don't use .shipit and
-always use with Rake.) because almost ruby libraries uses rake to release
+always use with Rake.) because almost ruby libraries use Rakefile to release
 process.
 
 
@@ -30,6 +30,7 @@ process.
 == Synopsis
 
 Example (This is from shipit gem Rakefile):
+
 	Rake::ShipitTask.new do |s|
 		s.Step.new {
 			system("svn", "up")

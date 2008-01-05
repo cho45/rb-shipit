@@ -192,6 +192,33 @@ class Rake::ShipitTask::Step::Ask
 	end
 end
 
+class Rake::ShipitTask::Step::Tag
+	def initialize(format="release-%s")
+		@format = format
+	end
+
+	def prepare
+		require "uri"
+		ENV["LANG"] = "C"
+		url = `svn info`[/^URL: (.+)/, 1]
+		if url =~ /trunk$/
+			@url = URI(url) + "."
+			unless `svn info '#{(@url + "tags")}'`[/Node Kind: directory/]
+				raise "tag directory is not found"
+			end
+		else
+			raise "Run at trunk!"
+		end
+	end
+
+	def run
+		trunk = @url + "trunk"
+		tag   = @url + ("tags/#{@format}" % VERS)
+		command = ["svn", "cp", trunk, tag].map {|i| i.to_s }
+		system(*command)
+	end
+end
+
 
 __END__
 require "shipit"

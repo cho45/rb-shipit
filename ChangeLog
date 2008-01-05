@@ -1,5 +1,30 @@
 2008-01-05  cho45
 
+	* [r4051] ., README:
+	  
+	  svn:ignore の設定と README のサンプルを Rakefile に追従
+
+	* [r4050] README, Rakefile, lib/shipit.rb:
+	  
+	  Step::Tag を追加
+
+	* [r4048] README:
+	  
+	  README を更新
+
+	* [r4047] lib/shipit.rb:
+	  
+	  前回のコミットと同じ問題
+
+	* [r4046] lib/shipit.rb:
+	  
+	  initialize が走るときにはまだVERSは変更されていないので
+	  コミットメッセージが矛盾してしまう
+
+	* [r4045] ChangeLog, Rakefile:
+	  
+	  Release 0.0.0
+
 	* [r4044] Rakefile:
 	  
 	  引数間違い

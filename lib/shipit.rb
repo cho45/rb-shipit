@@ -214,7 +214,8 @@ class Rake::ShipitTask::Step::Tag
 	def run
 		trunk = @url + "trunk"
 		tag   = @url + ("tags/#{@format}" % VERS)
-		command = ["svn", "cp", trunk, tag].map {|i| i.to_s }
+		msg   = "Release %s" % VERS
+		command = ["svn", "cp", "-m", msg, trunk, tag].map {|i| i.to_s }
 		system(*command)
 	end
 end

@@ -120,7 +120,7 @@ Rake::ShipitTask.new do |s|
 	s.Step.new {
 		raise "svn2cl.sh is not found" unless system("svn2cl.sh", "--version")
 	}.and {
-		system(%w(svn2cl.sh --break-before-msg=2 --group-by-day  --include-rev --separate-daylogs))
+		system("svn2cl.sh --break-before-msg=2 --group-by-day  --include-rev --separate-daylogs")
 	}
 	s.ChangeVersion
 	s.Commit

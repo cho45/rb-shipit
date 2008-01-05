@@ -173,11 +173,14 @@ class Rake::ShipitTask::Step::RubyForge
 		unless @rf.autoconfig["package_ids"].keys.include?(NAME)
 			@rf.create_package(@group_id, NAME)
 		end
+
+		@description = DESCRIPTION
 	end
 
 	def run
-		puts "Releasing #{NAME} v. #{VERS}"
+		puts "Releasing #{NAME} #{VERS}"
 		@rf.add_release @group_id, NAME, VERS, *@files
+		@rf.post_news @group_id, "#{NAME} #{VERS} released.", "#{@description}"
 	end
 end
 

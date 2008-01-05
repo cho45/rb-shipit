@@ -15,7 +15,7 @@ include FileUtils
 NAME              = "shipit"
 AUTHOR            = "cho45"
 EMAIL             = "cho45@lowreal.net"
-DESCRIPTION       = ""
+DESCRIPTION       = "Automated release tasks."
 RUBYFORGE_PROJECT = "lowreal"
 HOMEPATH          = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"
 BIN_FILES         = %w(  )

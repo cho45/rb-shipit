@@ -116,7 +116,7 @@ class Rake::ShipitTask::Step::ChangeVersion
 end
 
 class Rake::ShipitTask::Step::Commit
-	def initialize(msg="Release #{VERS}")
+	def initialize(msg=nil)
 		@msg = msg
 	end
 
@@ -124,7 +124,7 @@ class Rake::ShipitTask::Step::Commit
 	end
 
 	def run
-		system "svn", "ci", "-m", @msg
+		system "svn", "ci", "-m", @msg || "Release #{VERS}"
 	end
 end
 

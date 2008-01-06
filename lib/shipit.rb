@@ -22,11 +22,15 @@ class Rake::ShipitTask < Rake::TaskLib
 			puts green { "Preparing steps... " }
 			steps = []
 
+			def steps.state
+				@state ||= {}
+			end
+
 			eigenclass = class <<steps; self; end
 			plugins = self.class.const_get(:Step)
 			plugins.constants.each do |i|
 				eigenclass.__send__(:define_method, i) do |*args|
-					self << ret = plugins.const_get(i).new(*args)
+					self << ret = plugins.const_get(i).new(self, *args)
 					ret
 				end
 			end
@@ -56,6 +60,9 @@ class Rake::ShipitTask < Rake::TaskLib
 end
 
 class Rake::ShipitTask::Step::Step
+	def initialize(step)
+	end
+
 	def new(&block)
 		@prepare = block
 		self
@@ -75,7 +82,7 @@ class Rake::ShipitTask::Step::Step
 end
 
 class Rake::ShipitTask::Step::Twitter
-	def initialize(msg=nil)
+	def initialize(step, msg=nil)
 		@msg = msg
 	end
 
@@ -106,7 +113,7 @@ class Rake::ShipitTask::Step::Twitter
 end
 
 class Rake::ShipitTask::Step::ChangeVersion
-	def initialize(file, name="VERSION", vers=VERS)
+	def initialize(step, file, name="VERSION", vers=VERS)
 		@file = file
 		@name = name
 		@vers = vers
@@ -134,7 +141,7 @@ class Rake::ShipitTask::Step::ChangeVersion
 end
 
 class Rake::ShipitTask::Step::Commit
-	def initialize(msg=nil)
+	def initialize(step, msg=nil)
 		@msg = msg
 	end
 
@@ -154,7 +161,7 @@ class Rake::ShipitTask::Step::Commit
 end
 
 class Rake::ShipitTask::Step::Task
-	def initialize(*names)
+	def initialize(step, *names)
 		@names = names
 		@tasks = []
 	end
@@ -174,7 +181,7 @@ class Rake::ShipitTask::Step::Task
 end
 
 class Rake::ShipitTask::Step::RubyForge
-	def initialize(group_id=RUBYFORGE_PROJECT)
+	def initialize(step, group_id=RUBYFORGE_PROJECT)
 		@group_id    = group_id
 		@description = DESCRIPTION
 		@name        = NAME
@@ -209,6 +216,9 @@ class Rake::ShipitTask::Step::RubyForge
 end
 
 class Rake::ShipitTask::Step::Ask
+	def initialize(step)
+	end
+
 	def run
 		puts "Really run? Cancel to press Ctrl+C."
 		$stdin.gets
@@ -216,7 +226,7 @@ class Rake::ShipitTask::Step::Ask
 end
 
 class Rake::ShipitTask::Step::Tag
-	def initialize(format="release-%s")
+	def initialize(step, format="release-%s")
 		@format = format
 	end
 

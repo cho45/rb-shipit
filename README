@@ -50,6 +50,25 @@ Example (This is from shipit gem Rakefile):
 		s.Twitter
 	end
 
+See more example at Rakefile[http://svn.coderepos.org/share/lang/ruby/shipit/trunk/Rakefile] of shipit.rb.
+
+Some constants are currently hard-coded.
+
+* NAME -> name of the library
+* DESCRIPTION -> description of the library
+* VERS -> version of the library
+
+If you use different constants, please assign the value to above constants.
+
+== Development
+
+This library currently consider different environments.
+If you use cutagem[http://cutagem.rubyforge.org/], this library works fine :)
+
+And this library is hosted on CodeRepos[http://coderepos.org/share/wiki],
+so you have some ideas for this library, please commit to repository:
+
+	$ svn co http://svn.coderepos.org/share/lang/ruby/shipit/
 
 
 == Copyright

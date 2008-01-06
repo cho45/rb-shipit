@@ -176,8 +176,6 @@ class Rake::ShipitTask::Step::RubyForge
 
 	def prepare
 		require 'rubyforge'
-		p @vers
-
 		@rf = RubyForge.new
 		puts "Logging in"
 		@rf.login

@@ -68,11 +68,11 @@ If you use cutagem[http://cutagem.rubyforge.org/], this library works fine :)
 And this library is hosted on CodeRepos[http://coderepos.org/share/wiki],
 so you have some ideas for this library, please commit to repository:
 
-	$ svn co http://svn.coderepos.org/share/lang/ruby/shipit/
+	$ svn co http://svn.coderepos.org/share/lang/ruby/shipit/trunk shipit
 
 
 == Copyright
 
 Author::    cho45 <cho45@lowreal.net>
 Copyright:: Copyright (c) 2008 cho45
-License::   Creative Commons by
+License::   Ruby's

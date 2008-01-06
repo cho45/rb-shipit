@@ -118,7 +118,7 @@ Rake::ShipitTask.new do |s|
 	s.Ask
 	s.Task :rubyforge
 	s.Step.new {
-		raise "svn2cl.sh is not found" unless system("svn2cl.sh", "--version")
+		raise "svn2cl.sh is not found" unless `svn2cl.sh --version`[/svn2cl.sh/]
 	}.and {
 		system("svn2cl.sh --break-before-msg=2 --group-by-day  --include-rev --separate-daylogs")
 	}

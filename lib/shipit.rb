@@ -41,6 +41,8 @@ class Rake::ShipitTask < Rake::TaskLib
 			end
 			puts green { "done." }
 			unless t.name =~ /_prepare$/
+				puts "Really run? Cancel to press Ctrl+C."
+				$stdin.gets
 				puts
 				puts green { "Steps: #{steps.map{|i| i.class.name.sub(/.+::/, "")}.join(", ")}" }
 				steps.each do |s|
@@ -160,6 +162,36 @@ class Rake::ShipitTask::Step::Commit
 	end
 end
 
+class Rake::ShipitTask::Step::Tag
+	def initialize(step, format="release-%s")
+		@format = format
+	end
+
+	def prepare
+		require "uri"
+		ENV["LANG"] = "C"
+		url = `svn info`[/^URL: (.+)/, 1]
+		if url =~ /trunk$/
+			@url = URI(url) + "."
+			unless `svn info '#{(@url + "tags")}'`[/Node Kind: directory/]
+				raise "tags directory is not found"
+			end
+		else
+			raise "Run at trunk! Here is #{url}"
+		end
+		@vers = VERS
+	end
+
+	def run
+		trunk = @url + "trunk"
+		tag   = @url + ("tags/#{@format}" % @vers)
+		msg   = "Release %s" % @vers
+		command = ["svn", "cp", "-m", msg, trunk, tag].map {|i| i.to_s }
+		system(*command)
+	end
+end
+
+
 class Rake::ShipitTask::Step::Task
 	def initialize(step, *names)
 		@names = names
@@ -215,42 +247,15 @@ class Rake::ShipitTask::Step::RubyForge
 	end
 end
 
-class Rake::ShipitTask::Step::Ask
+# Skip preceding steps
+class Rake::ShipitTask::Step::Skip
 	def initialize(step)
-	end
-
-	def run
-		puts "Really run? Cancel to press Ctrl+C."
-		$stdin.gets
-	end
-end
-
-class Rake::ShipitTask::Step::Tag
-	def initialize(step, format="release-%s")
-		@format = format
+		step.clear
 	end
 
 	def prepare
-		require "uri"
-		ENV["LANG"] = "C"
-		url = `svn info`[/^URL: (.+)/, 1]
-		if url =~ /trunk$/
-			@url = URI(url) + "."
-			unless `svn info '#{(@url + "tags")}'`[/Node Kind: directory/]
-				raise "tags directory is not found"
-			end
-		else
-			raise "Run at trunk! Here is #{url}"
-		end
-		@vers = VERS
 	end
 
 	def run
-		trunk = @url + "trunk"
-		tag   = @url + ("tags/#{@format}" % @vers)
-		msg   = "Release %s" % @vers
-		command = ["svn", "cp", "-m", msg, trunk, tag].map {|i| i.to_s }
-		system(*command)
 	end
 end
-

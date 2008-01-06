@@ -116,7 +116,6 @@ Rake::ShipitTask.new do |s|
 	s.Step.new {
 		system("svn", "up")
 	}.and {}
-	s.Ask
 	s.Task :rubyforge
 	s.Step.new {
 		raise "svn2cl.sh is not found" unless `svn2cl.sh --version`[/svn2cl.sh/]
@@ -128,6 +127,7 @@ Rake::ShipitTask.new do |s|
 	s.Task :clean, :package
 	s.RubyForge
 	s.Tag
+	s.Skip
 	s.Twitter
 end
 

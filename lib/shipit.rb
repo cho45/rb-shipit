@@ -227,10 +227,10 @@ class Rake::ShipitTask::Step::Tag
 		if url =~ /trunk$/
 			@url = URI(url) + "."
 			unless `svn info '#{(@url + "tags")}'`[/Node Kind: directory/]
-				raise "tag directory is not found"
+				raise "tags directory is not found"
 			end
 		else
-			raise "Run at trunk!"
+			raise "Run at trunk! Here is #{url}"
 		end
 		@vers = VERS
 	end

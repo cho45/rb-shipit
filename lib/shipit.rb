@@ -36,14 +36,15 @@ class Rake::ShipitTask < Rake::TaskLib
 				s.prepare if s.respond_to? :prepare
 			end
 			puts green { "done." }
-			return if t.name =~ /_prepare$/
-			puts
-			puts green { "Steps: #{steps.map{|i| i.class.name.sub(/.+::/, "")}.join(", ")}" }
-			steps.each do |s|
-				puts red { "Running Step: #{s.class.name}" }
-				s.run
+			unless t.name =~ /_prepare$/
+				puts
+				puts green { "Steps: #{steps.map{|i| i.class.name.sub(/.+::/, "")}.join(", ")}" }
+				steps.each do |s|
+					puts red { "Running Step: #{s.class.name}" }
+					s.run
+				end
+				puts green { "done." }
 			end
-			puts green { "done." }
 		end
 		desc "Shipit: Automated Release"
 		task @name, &t

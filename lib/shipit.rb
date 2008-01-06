@@ -18,8 +18,7 @@ class Rake::ShipitTask < Rake::TaskLib
 	end
 
 	def define
-		desc "Shipit: Automated Release"
-		task @name do
+		t = Proc.new do |t|
 			puts green { "Preparing steps... " }
 			steps = []
 
@@ -37,6 +36,7 @@ class Rake::ShipitTask < Rake::TaskLib
 				s.prepare if s.respond_to? :prepare
 			end
 			puts green { "done." }
+			return if t.name =~ /_prepare$/
 			puts
 			puts green { "Steps: #{steps.map{|i| i.class.name.sub(/.+::/, "")}.join(", ")}" }
 			steps.each do |s|
@@ -45,6 +45,12 @@ class Rake::ShipitTask < Rake::TaskLib
 			end
 			puts green { "done." }
 		end
+		desc "Shipit: Automated Release"
+		task @name, &t
+		desc "Shipit: Automated Release (Only run prepare phase)"
+		task "#{@name}_prepare", &t
+		#desc "Shipit: Automated Release (dry run)"
+		#task "#{@name}_dryrun", &t
 	end
 end
 

@@ -1,12 +1,15 @@
 require "rubygems"
 require "rake"
 require "rake/tasklib"
+require "term/ansicolor"
 
 class Rake::ShipitTask < Rake::TaskLib
 	attr_reader :name
 	attr_reader :steps
 
 	module Step; end
+
+	include Term::ANSIColor
 
 	def initialize(name=:shipit, &block)
 		@name  = name
@@ -17,7 +20,7 @@ class Rake::ShipitTask < Rake::TaskLib
 	def define
 		desc "Shipit: Automated Release"
 		task @name do
-			puts "Preparing steps... "
+			puts green { "Preparing steps... " }
 			steps = []
 
 			eigenclass = class <<steps; self; end
@@ -30,15 +33,17 @@ class Rake::ShipitTask < Rake::TaskLib
 			end
 			@block.call(steps)
 			steps.each do |s|
+				puts cyan { "Running Step (Prepare): #{s.class.name}" }
 				s.prepare if s.respond_to? :prepare
 			end
-			puts "done."
-			puts "Steps: #{steps.map{|i| i.class.name.sub(/.+::/, "")}.join(", ")}"
+			puts green { "done." }
+			puts
+			puts green { "Steps: #{steps.map{|i| i.class.name.sub(/.+::/, "")}.join(", ")}" }
 			steps.each do |s|
-				puts "Running Step: #{s.class.name}"
+				puts red { "Running Step: #{s.class.name}" }
 				s.run
 			end
-			puts "done."
+			puts green { "done." }
 		end
 	end
 end

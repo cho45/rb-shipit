@@ -61,6 +61,7 @@ spec = Gem::Specification.new do |s|
 	s.test_files        = Dir["test/test_*.rb"]
 
 	s.add_dependency('rake')
+	s.add_dependency('term-ansicolor')
 	#s.add_dependency('activesupport', '>=1.3.1')
 	#s.required_ruby_version = '>= 1.8.2'
 

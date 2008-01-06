@@ -127,7 +127,6 @@ Rake::ShipitTask.new do |s|
 	s.Task :clean, :package
 	s.RubyForge
 	s.Tag
-	s.Skip
 	s.Twitter
 end
 

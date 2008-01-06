@@ -35,7 +35,6 @@ Example (This is from shipit gem Rakefile):
 		s.Step.new {
 			system("svn", "up")
 		}.and {}
-		s.Ask
 		s.Task :rubyforge
 		s.Step.new {
 			raise "svn2cl.sh is not found" unless system("svn2cl.sh", "--version")

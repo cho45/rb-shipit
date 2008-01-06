@@ -41,10 +41,10 @@ class Rake::ShipitTask < Rake::TaskLib
 			end
 			puts green { "done." }
 			unless t.name =~ /_prepare$/
-				puts "Really run? Cancel to press Ctrl+C."
-				$stdin.gets
 				puts
 				puts green { "Steps: #{steps.map{|i| i.class.name.sub(/.+::/, "")}.join(", ")}" }
+				puts "Really run? Cancel to press Ctrl+C."
+				$stdin.gets
 				steps.each do |s|
 					puts red { "Running Step: #{s.class.name}" }
 					s.run

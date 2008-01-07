@@ -47,10 +47,7 @@ class Rake::ShipitTask < Rake::TaskLib
 				$stdin.gets
 				steps.each do |s|
 					puts red { "Running Step: #{s.class.name}" }
-						s.run
-					else
-						s.run
-					end
+					s.run
 				end
 				puts green { "done." }
 			end

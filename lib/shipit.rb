@@ -40,24 +40,37 @@ class Rake::ShipitTask < Rake::TaskLib
 				s.prepare if s.respond_to? :prepare
 			end
 			puts green { "done." }
-			unless t.name =~ /_prepare$/
+			unless t.name =~ /:prepare$/
 				puts
 				puts green { "Steps: #{steps.map{|i| i.class.name.sub(/.+::/, "")}.join(", ")}" }
 				puts "Really run? Cancel to press Ctrl+C."
 				$stdin.gets
 				steps.each do |s|
 					puts red { "Running Step: #{s.class.name}" }
-					s.run
+					if t.name =~ /:dryrun$/
+						begin
+							Thread.start do
+								$SAFE = 4
+								s.run
+							end.join
+						rescue SecurityError => e
+							p e
+						end
+					else
+						s.run
+					end
 				end
 				puts green { "done." }
 			end
 		end
 		desc "Shipit: Automated Release"
 		task @name, &t
-		desc "Shipit: Automated Release (Only run prepare phase)"
-		task "#{@name}_prepare", &t
-		#desc "Shipit: Automated Release (dry run)"
-		#task "#{@name}_dryrun", &t
+		namespace @name do
+			desc "Shipit: Automated Release (Only run prepare phase)"
+			task :prepare, &t
+			desc "Shipit: Automated Release (Dry run)"
+			task :dryrun, &t
+		end
 	end
 end
 

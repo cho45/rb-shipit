@@ -47,15 +47,7 @@ class Rake::ShipitTask < Rake::TaskLib
 				$stdin.gets
 				steps.each do |s|
 					puts red { "Running Step: #{s.class.name}" }
-					if t.name =~ /:dryrun$/
-						begin
-							Thread.start do
-								$SAFE = 4
-								s.run
-							end.join
-						rescue SecurityError => e
-							p e
-						end
+						s.run
 					else
 						s.run
 					end
@@ -68,8 +60,8 @@ class Rake::ShipitTask < Rake::TaskLib
 		namespace @name do
 			desc "Shipit: Automated Release (Only run prepare phase)"
 			task :prepare, &t
-			desc "Shipit: Automated Release (Dry run)"
-			task :dryrun, &t
+#			desc "Shipit: Automated Release (Dry run)"
+#			task :dryrun, &t
 		end
 	end
 end

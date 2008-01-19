@@ -118,10 +118,9 @@ class Rake::ShipitTask::Step::Twitter
 end
 
 class Rake::ShipitTask::Step::ChangeVersion
-	def initialize(step, file, name="VERSION", vers=VERS)
+	def initialize(step, file, name="VERSION")
 		@file = file
 		@name = name
-		@vers = vers
 	end
 
 	def prepare
@@ -144,9 +143,9 @@ class Rake::ShipitTask::Step::ChangeVersion
 		m.module_eval(File.read("Rakefile"))
 
 		FileUtils.mv @org, @file
-		raise "Constant VERS in Rakefile must be same as 3rd argument of ChangeVersion step." unless @vers == m.const_get(:VERS)
+		raise "Constant VERS in Rakefile must be same as 3rd argument of ChangeVersion step." unless @new_version == m.const_get(:VERS)
 
-		@vers.replace @new_version
+		VERS.replace @new_version
 	end
 
 	def run

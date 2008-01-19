@@ -134,16 +134,26 @@ class Rake::ShipitTask::Step::ChangeVersion
 		puts "Find version string #{@match[1]} and will change to #{@new_version}"
 
 		# check content of Rakefile
+		check_version = nil
 		@org = @file.parent + "#{@file.basename}.org"
 		FileUtils.cp @file, @org
 		@file.open("w") do |f|
 			f.print @newcont
 		end
-		m = Module.new
-		m.module_eval(File.read("Rakefile"))
+
+		## run ruby not to duplicate rake tasks.
+		IO.popen("ruby", "r+") do |ruby|
+			ruby << <<-EOS
+				m = Module.new
+				m.module_eval(File.read("Rakefile"))
+				print Marshal.dump(m.const_get(:VERS))
+			EOS
+			ruby.close_write
+			check_version = Marshal.load(ruby.read)
+		end
 
 		FileUtils.mv @org, @file
-		raise "Constant VERS in Rakefile must be same as 3rd argument of ChangeVersion step." unless @new_version == m.const_get(:VERS)
+		raise "Constant VERS in Rakefile must be same as 3rd argument of ChangeVersion step." unless @new_version == check_version
 
 		VERS.replace @new_version
 	end

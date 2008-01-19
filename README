@@ -54,10 +54,10 @@ See more example at Rakefile[http://svn.coderepos.org/share/lang/ruby/shipit/tru
 Some constants are currently hard-coded.
 
 * NAME -> name of the library.
-          This is MUST reference to version string of ChangeVersion step, or
-          the package task will fail and RubyForge step release wrong version.
 * DESCRIPTION -> description of the library
 * VERS -> version of the library
+          This is MUST reference to version string of ChangeVersion step, or
+          the package task will fail and RubyForge step release wrong version.
 
 If you use different constants, please assign the value to above constants.
 

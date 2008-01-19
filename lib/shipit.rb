@@ -2,6 +2,7 @@ require "rubygems"
 require "rake"
 require "rake/tasklib"
 require "term/ansicolor"
+require "fileutils"
 
 class Rake::ShipitTask < Rake::TaskLib
 	attr_reader :name
@@ -129,17 +130,29 @@ class Rake::ShipitTask::Step::ChangeVersion
 		@content  = @file.read
 		@match    = @content.match(/#{@name}\s*=\s*['"](\d+\.\d+\.\d+)['"]/)
 		@new_version = @match[1].succ
+		@newcont  = @content[0..@match.begin(1)-1] + @new_version + @content[@match.end(1)..-1]
 		raise "Can't find version string in #{@file}." if @match.nil?
 		puts "Find version string #{@match[1]} and will change to #{@new_version}"
+
+		# check content of Rakefile
+		@org = @file.parent + "#{@file.basename}.org"
+		FileUtils.cp @file, @org
+		@file.open("w") do |f|
+			f.print @newcont
+		end
+		m = Module.new
+		m.module_eval(File.read("Rakefile"))
+
+		FileUtils.mv @org, @file
+		raise "Constant VERS in Rakefile must be same as 3rd argument of ChangeVersion step." unless @vers == m.const_get(:VERS)
+
 		@vers.replace @new_version
 	end
 
 	def run
 		puts "Changing version to #{@new_version}"
 		@file.open("w") do |f|
-			f.print @content[0..@match.begin(1)-1]
-			f.print @new_version
-			f.print @content[@match.end(1)..-1]
+			f.print @newcont
 		end
 	end
 end

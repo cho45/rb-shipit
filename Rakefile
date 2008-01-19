@@ -116,13 +116,13 @@ Rake::ShipitTask.new do |s|
 	s.Step.new {
 		system("svn", "up")
 	}.and {}
-	s.Task :rubyforge
 	s.Step.new {
-		raise "svn2cl.sh is not found" unless `svn2cl.sh --version`[/svn2cl.sh/]
+		raise "changelog-with-hatenastar.rb is not found" unless system("which", "changelog-with-hatenastar.rb")
 	}.and {
-		system("svn2cl.sh --break-before-msg=2 --group-by-day  --include-rev --separate-daylogs")
+		system("changelog-with-hatenastar.rb > ChangeLog")
 	}
-	s.ChangeVersion __FILE__, "VERS"
+	s.Task :rubyforge
+	s.ChangeVersion "Rakefile", "VERS"
 	s.Commit
 	s.Task :clean, :package
 	s.RubyForge

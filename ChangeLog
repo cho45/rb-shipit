@@ -1,140 +1,63 @@
-2008-01-06  cho45
+ChangeLog of http://svn.coderepos.org/share/lang/ruby/shipit/trunk
 
-	* [r4147] lib/shipit.rb:
-	  
-	  Ask after show all steps.
+2008-01-19 cho45
 
-	* [r4146] Rakefile:
-	  
-	  Remove skip from Rakefile... This was only for debugging...
+	* [bug][interface] @4959:
+		Remove 3rd argument of Step::ChangeVersion because it is meaningless.
+		Fix bug around checking vers on Step::ChangeVersion.
+		
+		
 
-	* [r4141] README:
-	  
-	  follow removing Step::Ask
+	* [new] @4958:
+		Implement checking VERS constant to avoid trap.
 
-	* [r4140] Rakefile, lib/shipit.rb:
-	  
-	  Remove Step::Ask (is now default)
-	  Add Step::Skip (is skip preceding steps)
+2008-01-07 cho45
 
-	* [r4139] lib/shipit.rb:
-	  
-	  implement state shared with steps.
-	  change spec of arguments of initialize
+	* [interface] @4185:
+		remove dryrun implemented by $SAFE because it is not useful.
 
-	* [r4138] README:
-	  
-	  change license to Ruby's
-	  fix checkout uri
+	* [interface] @4183:
+		use namespace
+		try to implement dryrun (this is just run on high $SAFE environment)
 
-	* [r4136] README:
-	  
-	  append development notices to README
+2008-01-06 cho45
 
-	* [r4110] lib/shipit.rb:
-	  
-	  better message
+	* [release] @4149:
+		Release 0.0.4
 
-	* [r4105] lib/shipit.rb:
-	  
-	  unexpected return がうざいのでちゃんと条件分岐する
+	* [interface] @4140:
+		Remove Step::Ask (is now default)
+		Add Step::Skip (is skip preceding steps)
 
-	* [r4104] lib/shipit.rb:
-	  
-	  prepare タスクだけを実行できるように
-	  (Perl の shipit コマンドから shipit gem のタスクをたたきやすいように)
+	* [new] @4139:
+		implement state shared with steps.
+		change spec of arguments of initialize
 
-	* [r4101] lib/shipit.rb:
-	  
-	  デバッグコードが残っていた
+2008-01-05 cho45
 
-	* [r4100] Rakefile, lib/shipit.rb:
-	  
-	  term-ansicolor 使ってみやすくなるように
+	* [release] @4077:
+		Release 0.0.3
 
-	* [r4099] Rakefile:
-	  
-	  出力がうざいので判定方法を変更
+	* [bug] @4075:
+		タスクの実行を内部でやらないように (version をよみなおすため)
+		いろいろやってみたけどこれがいちばん簡単なようだ……
+		([important] Fix bugs around treating VERS.)
 
-2008-01-05  cho45
+	* [bug] @4069:
+		run phase 時にエラーがでないように定数参照は prepare 時にするように
 
-	* [r4078] README:
-	  
-	  README のサンプルを更新 (ChangeVersion を変更した)
+	* [interface] @4068:
+		ChangeVersion の仕様をよくあるほうに変更
+		s.ChangeVersion filename, "VERSION"
 
-	* [r4076] ChangeLog, Rakefile:
-	  
-	  Release 0.0.3
+	* [release] @4052:
+		Release 0.0.2
 
-	* [r4075] lib/shipit.rb:
-	  
-	  タスクの実行を内部でやらないように (version をよみなおすため)
-	  いろいろやってみたけどこれがいちばん簡単なようだ……
+	* [bug] @4046:
+		initialize が走るときにはまだVERSは変更されていないので
+		コミットメッセージが矛盾してしまう
+		(Fix discrepancy of commit message in shipit step.)
 
-	* [r4073] lib/shipit.rb:
-	  
-	  version のかきかえがうまくいかず、重複してリリースできない問題を修正
-
-	* [r4071] lib/shipit.rb:
-	  
-	  変更が残っている場合にはリリースコミットをできないように
-
-	* [r4070] lib/shipit.rb:
-	  
-	  定数参照の修正漏れ
-
-	* [r4069] lib/shipit.rb:
-	  
-	  run phase 時にエラーがでないように定数参照は prepare 時にするように
-
-	* [r4068] Rakefile, lib/shipit.rb:
-	  
-	  ChangeVersion の仕様をよくあるほうに変更
-	  s.ChangeVersion filename, "VERSION"
-
-	* [r4054] lib/shipit.rb:
-	  
-	  tag のとき -m 追加 (エディタがひらいてしまっていた)
-
-	* [r4052] ChangeLog, Rakefile:
-	  
-	  Release 0.0.2
-
-	* [r4051] ., README:
-	  
-	  svn:ignore の設定と README のサンプルを Rakefile に追従
-
-	* [r4050] README, Rakefile, lib/shipit.rb:
-	  
-	  Step::Tag を追加
-
-	* [r4048] README:
-	  
-	  README を更新
-
-	* [r4047] lib/shipit.rb:
-	  
-	  前回のコミットと同じ問題
-
-	* [r4046] lib/shipit.rb:
-	  
-	  initialize が走るときにはまだVERSは変更されていないので
-	  コミットメッセージが矛盾してしまう
-
-	* [r4045] ChangeLog, Rakefile:
-	  
-	  Release 0.0.0
-
-	* [r4044] Rakefile:
-	  
-	  引数間違い
-
-	* [r4043] README, Rakefile, lib/shipit.rb:
-	  
-	  description とか
-
-	* [r4042] ., ChangeLog, README, Rakefile, lib, lib/shipit.rb, test,
-	  test/shipit_test.rb, test/test_helper.rb:
-	  
-	  import
+	* [release] @4045:
+		Release 0.0.0
 

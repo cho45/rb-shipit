@@ -2,6 +2,12 @@ ChangeLog of http://svn.coderepos.org/share/lang/ruby/shipit/trunk
 
 2008-01-19 cho45
 
+	* [bug] @4962:
+		Fix registering rake tasks redundantly. 
+
+	* [release] @4961:
+		Release 0.0.5
+
 	* [bug][interface] @4959:
 		Remove 3rd argument of Step::ChangeVersion because it is meaningless.
 		Fix bug around checking vers on Step::ChangeVersion.

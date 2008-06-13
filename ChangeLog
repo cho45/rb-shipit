@@ -1,4 +1,16 @@
-ChangeLog of http://svn.coderepos.org/share/lang/ruby/shipit/trunk
+2008-06-14  cho45
+
+	* [new]:
+		Supported git.
+
+	* [release]:
+		Release 0.0.7
+
+2008-01-29  cho45
+
+	* [release]:
+		Release 0.0.6
+
 
 2008-01-19 cho45
 
@@ -11,8 +23,6 @@ ChangeLog of http://svn.coderepos.org/share/lang/ruby/shipit/trunk
 	* [bug][interface] @4959:
 		Remove 3rd argument of Step::ChangeVersion because it is meaningless.
 		Fix bug around checking vers on Step::ChangeVersion.
-		
-		
 
 	* [new] @4958:
 		Implement checking VERS constant to avoid trap.

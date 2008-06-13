@@ -98,7 +98,7 @@ module Rake::ShipitTask::VC
 			temp << msg
 			temp.close
 
-			system 'svn', 'copy', '--file', temp.path, trunk_url, tag_url(ver)
+			system 'svn', 'copy', '--file', temp.path, trunk_url.to_s, tag_url(ver).to_s
 		end
 
 		def local_diff(file)

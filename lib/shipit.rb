@@ -1,3 +1,6 @@
+
+$LOAD_PATH.unshift "lib"
+
 require "rubygems"
 require "rake"
 require "rake/tasklib"
@@ -5,6 +8,8 @@ require "term/ansicolor"
 require "fileutils"
 
 class Rake::ShipitTask < Rake::TaskLib
+	require "shipit/vc"
+
 	attr_reader :name
 	attr_reader :steps
 
@@ -172,17 +177,13 @@ class Rake::ShipitTask::Step::Commit
 	end
 
 	def prepare
+		@vc = Rake::ShipitTask::VC.new
 		@vers = VERS
-		st = `svn st`
-		unless st.empty?
-			puts "Any changes remain?"
-			puts st
-			exit
-		end
+		@vc.precommit
 	end
 
 	def run
-		system "svn", "ci", "-m", @msg || "Release #{@vers}"
+		@vc.commit(@msg || "Release #{@vers}")
 	end
 end
 
@@ -192,26 +193,16 @@ class Rake::ShipitTask::Step::Tag
 	end
 
 	def prepare
-		require "uri"
-		ENV["LANG"] = "C"
-		url = `svn info`[/^URL: (.+)/, 1]
-		if url =~ /trunk$/
-			@url = URI(url) + "."
-			unless `svn info '#{(@url + "tags")}'`[/Node Kind: directory/]
-				raise "tags directory is not found"
-			end
-		else
-			raise "Run at trunk! Here is #{url}"
-		end
+		@vc = Rake::ShipitTask::VC.new
 		@vers = VERS
+		@msg  = "Release %s" % @vers
+		if @vc.exists_tagged_version(@vers)
+			raise "#{@tag} is already exists"
+		end
 	end
 
 	def run
-		trunk = @url + "trunk"
-		tag   = @url + ("tags/#{@format}" % @vers)
-		msg   = "Release %s" % @vers
-		command = ["svn", "cp", "-m", msg, trunk, tag].map {|i| i.to_s }
-		system(*command)
+		@vc.tag_version(@vers, @msg)
 	end
 end
 
@@ -247,6 +238,7 @@ class Rake::ShipitTask::Step::RubyForge
 	def prepare
 		require 'rubyforge'
 		@rf = RubyForge.new
+		@rf.configure {}
 		puts "Logging in"
 		@rf.login
 		@c = @rf.userconfig

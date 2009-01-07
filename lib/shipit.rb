@@ -188,14 +188,15 @@ class Rake::ShipitTask::Step::Commit
 end
 
 class Rake::ShipitTask::Step::Tag
-	def initialize(step, format="release-%s")
+	def initialize(step, format="%s")
 		@format = format
 	end
 
 	def prepare
 		@vc = Rake::ShipitTask::VC.new
-		@vers = VERS
+		@vers = @format % VERS
 		@msg  = "Release %s" % @vers
+		puts "tag: #{@vers}"
 		if @vc.exists_tagged_version(@vers)
 			raise "#{@tag} is already exists"
 		end

@@ -90,7 +90,7 @@ module Rake::ShipitTask::VC
 		end
 
 		def exists_tagged_version(ver)
-			!!`svn info '#{tag_url(ver)}'`[/Node Kind: directory/]
+			!!`svn info '#{tag_url(ver)}' 2>/dev/null`[/Node Kind: directory/]
 		end
 
 		def tag_version(ver, msg)
